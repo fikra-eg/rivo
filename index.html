@@ -1261,7 +1261,7 @@ ${foot()}</div>`;
             r === "shop"
               ? V.shop(h[1])
               : r === "p"
-                ? V.product(h[1])
+                ? V.product(decodeURIComponent(h[1] || ""))
                 : r === "cart"
                   ? V.cart()
                   : V.home();
