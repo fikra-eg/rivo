@@ -457,6 +457,18 @@
       .grid .pc {
         animation: in 0.5s both;
       }
+      .best-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 22px;
+      }
+      .best-grid .pc .im {
+        aspect-ratio: 4/5;
+      }
+      .best-grid .pc .ph img {
+        transform: scale(var(--pz, 1));
+        transform-origin: center;
+      }
       @keyframes in {
         from {
           opacity: 0;
@@ -771,7 +783,8 @@
       @media (max-width: 1000px) {
         .drop,
         .more .g4,
-        .grid {
+        .grid,
+        .best-grid {
           grid-template-columns: repeat(2, 1fr);
         }
       }
@@ -815,7 +828,8 @@
         .edit .row > div:nth-child(n) {
           flex-basis: 78vw;
         }
-        .grid {
+        .grid,
+        .best-grid {
           grid-template-columns: 1fr 1fr;
           gap: 26px 12px;
         }
@@ -1045,6 +1059,7 @@
           c: "accessories",
           img: "p4",
           pos: "50% 50%",
+          zoom: 0.92,
           col: ["Natural"],
           sz: ["One size"],
           fit: "Classic six-panel construction with an adjustable back closure and curved brim.",
@@ -1059,6 +1074,7 @@
           c: "accessories",
           img: "p5",
           pos: "50% 50%",
+          zoom: 0.90,
           col: ["Silver"],
           sz: ["S", "M", "L", "XL"],
           fit: "Relaxed CAP silhouette with a clean straight hem and an easy everyday fit.",
@@ -1070,9 +1086,10 @@
           id: "polo crewneck",
           n: "Polo Crewneck",
           p: 1850,
-          c: "t-shirt",
+          c: "tees",
           img: "p6",
           pos: "50% 50%",
+          zoom: 0.92,
           col: ["Navy"],
           sz: ["S", "M", "L", "XL"],
           fit: "Relaxed lightweight silhouette with a clean minimal profile and full front zip.",
@@ -1087,6 +1104,7 @@
           c: "t-shirt",
           img: "p7",
           pos: "50% 50%",
+          zoom: 0.90,
           col: ["Green"],
           sz: ["One size"],
           fit: "Classic fit with a comfortable straight cut, ribbed collar and sleeves.",
@@ -1127,7 +1145,7 @@
                 ]
               : null;
         const fallback = src || srcFor(p, col);
-        return `<img class="${cls}" src="${fallback}" alt="${p.n}" loading="lazy" decoding="async" style="object-position:${p.pos}">`;
+        return `<img class="${cls}" src="${fallback}" alt="${p.n}" loading="lazy" decoding="async" style="object-position:${p.pos};--pz:${p.zoom || 1}">`;
       };
       const card = (p) =>
         `<a class="pc" href="#/p/${p.id}"><div class="im"><div class="ph">${IM(p)}<div class="s2">${IM(p, 1)}</div></div></div><div class="nm"><span>${p.n}</span><span>${p.p} ${CFG.cur}</span></div></a>`;
@@ -1208,13 +1226,13 @@
 <div class="cta"><a class="btn" href="#/shop">Shop the drop</a></div></div>${mq()}
 <section><div class="head rv"><h2>New drop</h2><a href="#/shop">Shop all</a></div><div class="drop rv">${nd.map(card).join("")}</div></section>
 
-<section><div class="head rv"><h2>Best sellers</h2></div><div class="grid rv">${bs.map(card).join("")}</div></section>
+<section><div class="head rv"><h2>Best sellers</h2></div><div class="best-grid rv">${bs.map(card).join("")}</div></section>
 <div class="stmt" id="stmt"><h2><span>RIVO is not</span> <span>made to</span> <span>blend in.</span></h2></div>
 ${foot()}</div>`;
         },
         shop(c) {
           c = c || "all";
-          return `<div class="shop"><h1>Shop</h1><div class="bar"><div class="tabs">${["all", "tees", "hoodies", "sweatshirts", "shirts", "pants", "outerwear", "accessories"].map((k) => `<button data-tab="${k}" class="${k === c ? "on" : ""}">${k === "all" ? "All" : k === "tees" ? "T-Shirts" : k[0].toUpperCase() + k.slice(1)}</button>`).join("")}</div>
+          return `<div class="shop"><h1>Shop</h1><div class="bar"><div class="tabs">${["all", "tees", "hoodies", "sweatshirts", "accessories"].filter((k) => k === "all" || P.some((p) => p.c === k)).map((k) => `<button data-tab="${k}" class="${k === c ? "on" : ""}">${k === "all" ? "All" : k === "tees" ? "T-Shirts" : k[0].toUpperCase() + k.slice(1)}</button>`).join("")}</div>
 <div class="ctl"><input id="q" type="search" placeholder="Search" aria-label="Search"><select id="so" aria-label="Sort"><option value="n">Newest</option><option value="a">Price: low to high</option><option value="d">Price: high to low</option></select></div></div><div class="grid" id="gr"></div></div>${foot()}`;
         },
         product(id) {
